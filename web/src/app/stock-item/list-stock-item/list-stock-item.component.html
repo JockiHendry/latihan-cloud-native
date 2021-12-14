@@ -1,0 +1,54 @@
+<div>
+  <mat-card>
+    <mat-card-title>Item Stok</mat-card-title>
+    <mat-card-content>
+      <ais-instantsearch [config]="algoliaConfig">
+        <div fxLayout="column" fxLayoutGap="20px">
+          <ais-search-box></ais-search-box>
+          <div fxLayout="row">
+            <ais-refinement-list attribute="category" fxFlex="200px"></ais-refinement-list>
+            <ais-hits fxFlex="80%">
+              <ng-template let-hits="hits">
+                <p *ngIf="(hits?.length === 0)">Maaf, item yang Anda cari tidak ditemukan.</p>
+                <div>
+                  <mat-table [dataSource]="hits">
+                    <ng-container matColumnDef="sku">
+                      <mat-header-cell *matHeaderCellDef> SKU</mat-header-cell>
+                      <mat-cell *matCellDef="let element">
+                        <ais-highlight [hit]="element" attribute="sku"></ais-highlight>
+                      </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="name">
+                      <mat-header-cell *matHeaderCellDef> Name</mat-header-cell>
+                      <mat-cell *matCellDef="let element" class="no-min-height">
+                        <ais-highlight [hit]="element" attribute="name"></ais-highlight>
+                      </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="category">
+                      <mat-header-cell *matHeaderCellDef fxFlex.gt-sm="100px"> Category</mat-header-cell>
+                      <mat-cell *matCellDef="let element" class="no-min-height" fxFlex.gt-sm="100px">
+                        <ais-highlight [hit]="element" attribute="category"></ais-highlight>
+                      </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="quantity">
+                      <mat-header-cell *matHeaderCellDef fxFlex.gt-sm="80px"> Qty</mat-header-cell>
+                      <mat-cell *matCellDef="let element" class="no-min-height" fxFlex.gt-sm="80px">
+                        {{ element.quantity }}
+                      </mat-cell>
+                    </ng-container>
+                    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: displayedColumns;" fxLayout="column" fxLayoutAlign="start"
+                             fxLayout.gt-sm="row"></mat-row>
+                  </mat-table>
+                </div>
+              </ng-template>
+            </ais-hits>
+          </div>
+        </div>
+      </ais-instantsearch>
+    </mat-card-content>
+    <mat-card-actions>
+      <a mat-raised-button color="primary" routerLink="./create">Tambah</a>
+    </mat-card-actions>
+  </mat-card>
+</div>
